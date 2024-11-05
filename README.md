@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # projet_covoiturage
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# covoiturageAuth
+>>>>>>> 2b3a282c35fc0edbcc655904c2cf767c543b34b0
