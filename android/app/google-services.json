@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897000279312",
+    "project_id": "projet-covoiturage-ca536",
+    "storage_bucket": "projet-covoiturage-ca536.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897000279312:android:653ae14bb334c4a4402995",
+        "android_client_info": {
+          "package_name": "com.ilef.covoiturage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlj9nbKtCtfF2TbtAgkJhW_AJl5XuIByk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
