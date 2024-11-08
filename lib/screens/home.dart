@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet_covoiturage/screens/map_screen.dart';
+import 'package:projet_covoiturage/screens/trajetlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TrajetListScreen()),
+      );
+    }
   }
 
   @override
@@ -38,13 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           _screens[_selectedIndex],
-             Positioned(
+          Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Container(
-              color: const Color.fromARGB(255, 12, 17, 51), 
-              padding: const EdgeInsets.all(16), 
+              color: const Color.fromARGB(255, 12, 17, 51),
+              padding: const EdgeInsets.all(16),
               child: const Text(
                 'WASALNI',
                 textAlign: TextAlign.left,
@@ -57,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-           bottom: 25, 
+            bottom: 25,
             left: 0,
             right: 0,
             child: Column(
@@ -66,27 +74,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Devenez chauffeur!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 28, 
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 8), 
+                const SizedBox(height: 8),
                 const Text(
                   'Partagez votre voiture et maximisez vos gains',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18, 
+                    fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 10), // Espace avant le bouton
+                const SizedBox(height: 10),
                 Container(
-                  width: double.infinity, // Rendre le bouton aussi large que possible
-                  padding: const EdgeInsets.symmetric(horizontal: 50), // Espace autour du bouton
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Remplacez print par votre méthode de logging
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MapScreen()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 90, 164, 165),
@@ -100,29 +111,34 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    bottomNavigationBar: SizedBox(
-        height: 60, 
+      bottomNavigationBar: SizedBox(
+        height: 60,
         child: BottomAppBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-            buildNavBarItem(CupertinoIcons.home, 0),
-            buildNavBarItem(CupertinoIcons.news_solid, 1),
-            
-            const SizedBox(width: 10),
- 
-            buildNavBarItem(CupertinoIcons.conversation_bubble, 2),
-            buildNavBarItem(CupertinoIcons.profile_circled, 3),
-          ],
+              buildNavBarItem(Icons.home, 0),
+                        buildNavBarItem(Icons.assignment, 1),
+
+                          const SizedBox(width: 10),
+            buildNavBarItem(Icons.history, 2),
+            buildNavBarItem(Icons.directions_car, 3),
+            ],
+          ),
         ),
       ),
-    ),
-      floatingActionButton: const ClipOval(
+      floatingActionButton: ClipOval(
         child: Material(
-          color:  Color.fromARGB(255, 13, 17, 50),
+          color: const Color.fromARGB(255, 13, 17, 50),
           elevation: 10,
           child: InkWell(
-            child: SizedBox(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MapScreen()),
+              );
+            },
+            child: const SizedBox(
               width: 48,
               height: 48,
               child: Icon(
@@ -148,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon,
             color: _selectedIndex == index
                 ? const Color.fromARGB(255, 90, 164, 165)
-                :  const Color.fromARGB(255, 13, 17, 50),
+                : const Color.fromARGB(255, 13, 17, 50),
           ),
         ],
       ),

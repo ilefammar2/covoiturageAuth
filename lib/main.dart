@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Constants.signInRoute: (context) => AuthScreens.buildSignInScreen(context),
         Constants.homeRoute: (context) => const HomeScreen(),
+        
         Constants.verifyEmailRoute: (context) => AuthScreens.buildEmailVerificationScreen(context),
       },
     );
