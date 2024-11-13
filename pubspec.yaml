@@ -21,6 +21,8 @@ dependencies:
   latlong2:
   location:
   intl: ^0.19.0
+  font_awesome_flutter: ^10.1.0
+
 
 
 
@@ -36,7 +38,20 @@ flutter:
   uses-material-design: true
   assets:
     - lib/assets/v1.jpg
-    - lib/assets/ls.jpg
+    - lib/assets/v.jpg
+    - lib/assets/ls.png
+    - lib/assets/voiture.jpg
+    - lib/assets/voituree.jpg
+    - lib/assets/v2.jpg
+    - lib/assets/v3.jpg
+    - lib/assets/p.jpg
+
+
+
+
+
+
+
 
   fonts:
     - family: SocialIcons

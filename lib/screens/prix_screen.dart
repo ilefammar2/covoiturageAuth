@@ -1,42 +1,108 @@
+// ignore: unnecessary_import
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projet_covoiturage/screens/date_depart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:projet_covoiturage/screens/choix_vehicule.dart';
 import 'package:projet_covoiturage/screens/home.dart';
-import 'package:projet_covoiturage/screens/map_screen.dart';
-import 'package:projet_covoiturage/screens/trajetlist_screen.dart';
+import 'package:projet_covoiturage/screens/annoncelist_screen.dart';
+import 'package:projet_covoiturage/screens/vehicule_screen.dart';
 
 class PrixScreen extends StatefulWidget {
-  const PrixScreen({super.key});
+ final String annonceId;
 
+  const PrixScreen({super.key, required this.annonceId});
   @override
+  // ignore: library_private_types_in_public_api
   _PrixScreenState createState() => _PrixScreenState();
 }
 
 class _PrixScreenState extends State<PrixScreen> {
   int _selectedIndex = 0;
   final TextEditingController _priceController = TextEditingController(text: "0");
-  String _displayedPrice = "0"; // Variable to hold the displayed price
+  String _displayedPrice = "0";
+  
+Future<void> _savePriceAndMoveToNextStep() async {
+    final price = _priceController.text.trim();
+    if (price.isEmpty) {
+      debugPrint('Veuillez entrer un prix.');
+      return;
+    }
 
+ try {
+    // Récupérer les informations de l'annonce existantes
+    DocumentSnapshot annonceSnapshot = await FirebaseFirestore.instance
+        .collection('annonces')
+        .doc(widget.annonceId)
+        .get();
+
+    if (!annonceSnapshot.exists) {
+      debugPrint('Annonce non trouvée.');
+      return;
+    }
+
+    // Récupérer la date de départ existante depuis Firestore
+    final dateDepart = annonceSnapshot['date_depart']['selectedDate'];
+    final trajet = annonceSnapshot['trajet'];
+
+    // Mettre à jour Firestore avec le prix, la date de départ et les autres informations
+ await FirebaseFirestore.instance
+        .collection('annonces')
+        .doc(widget.annonceId)
+        .update({
+      'prix': {
+        'amount': price,
+        'currency': 'DNT',  // Optionnel, si tu veux inclure la monnaie
+      },
+      'date_depart': {
+        'selectedDate': dateDepart,
+      },
+      'trajet': trajet, // Garder le trajet inchangé
+    });
+
+    // Passer à l'étape suivante (ChoixVehiculeScreen)
+    Navigator.push(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChoixVehiculeScreen(annonceId: widget.annonceId),
+      ),
+    );
+  } catch (e) {
+    debugPrint('Erreur lors de l\'enregistrement du prix: $e');
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Erreur lors de l\'enregistrement du prix.')),
+    );
+  }
+}
+
+ 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
-    // Handle navigation based on selected index
     if (index == 0) {
-      // Navigate to HomeScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
-    } else if (index == 1) {
-      // Navigate to TrajetListScreen
+    } if (index == 1) {
+      // L'icône 1 affichera la liste des annonces
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const TrajetListScreen()),
+        MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
+      );
+    }
+     if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const VehicleScreen()),
       );
     }
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -80,46 +146,24 @@ class _PrixScreenState extends State<PrixScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 60,
-        child: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildNavBarItem(Icons.home, 0),
-                        buildNavBarItem(Icons.assignment, 1),
-
-                          const SizedBox(width: 10),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildNavBarItem(Icons.home, 0),
+            buildNavBarItem(Icons.assignment, 1),
             buildNavBarItem(Icons.history, 2),
             buildNavBarItem(Icons.directions_car, 3),
-            ],
-          ),
+          ],
         ),
       ),
-      floatingActionButton: ClipOval(
-        child: Material(
-          color: const Color.fromARGB(255, 13, 17, 50),
-          elevation: 10,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MapScreen()),
-              );
-            },
-            child: const SizedBox(
-              width: 48,
-              height: 48,
-              child: Icon(
-                CupertinoIcons.add_circled,
-                size: 28,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _savePriceAndMoveToNextStep, // Appeler la méthode pour enregistrer l'annonce
+        backgroundColor: const Color.fromARGB(255, 143, 193, 194),
+        child: const Icon(Icons.arrow_forward),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

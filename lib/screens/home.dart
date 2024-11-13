@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet_covoiturage/screens/map_screen.dart';
-import 'package:projet_covoiturage/screens/trajetlist_screen.dart';
+import 'package:projet_covoiturage/screens/annoncelist_screen.dart';
+import 'package:projet_covoiturage/screens/vehicule_screen.dart';
+import 'package:projet_covoiturage/custom_navbar.dart'; // Import du CustomNavBar
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,9 +14,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  int notificationCount = 0; // Exemple: nombre de notifications non lues
+
   static final List<Widget> _screens = [
     Container(),
-    const Placeholder(),
+    const AnnonceListScreen(),
     const Placeholder(),
     const Placeholder(),
     const Placeholder(),
@@ -27,7 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const TrajetListScreen()),
+        MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
+      );
+    }
+    if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const VehicleScreen()),
       );
     }
   }
@@ -40,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('lib/assets/v1.jpg'),
+                image: AssetImage('lib/assets/voiture.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -50,86 +60,104 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 0,
             left: 0,
             right: 0,
-            child: Container(
-              color: const Color.fromARGB(255, 12, 17, 51),
-              padding: const EdgeInsets.all(16),
-              child: const Text(
-                'WASALNI',
-                textAlign: TextAlign.left,
+            child: AppBar(
+              backgroundColor: const Color.fromARGB(255, 12, 17, 51),
+              title: const Text(
+                'PIP',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                   color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            bottom: 25,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                const Text(
-                  'Devenez chauffeur!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Partagez votre voiture et maximisez vos gains',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const MapScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 90, 164, 165),
-                      foregroundColor: Colors.white,
+              actions: [
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          notificationCount = 0; 
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
+                        );
+                      },
                     ),
-                    child: const Text('Publier Trajet'),
-                  ),
+                    if (notificationCount > 0)
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '$notificationCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),
           ),
+          Positioned(
+            bottom: 70,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: SizedBox(
+                width: 250,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MapScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 12, 17, 51),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  child: const Text('Publier annonce'),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 60,
-        child: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildNavBarItem(Icons.home, 0),
-                        buildNavBarItem(Icons.assignment, 1),
-
-                          const SizedBox(width: 10),
-            buildNavBarItem(Icons.history, 2),
-            buildNavBarItem(Icons.directions_car, 3),
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
       floatingActionButton: ClipOval(
         child: Material(
-          color: const Color.fromARGB(255, 13, 17, 50),
+          color: const Color.fromARGB(255, 12, 17, 51),
           elevation: 10,
           child: InkWell(
             onTap: () {
@@ -139,11 +167,11 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: const SizedBox(
-              width: 48,
-              height: 48,
+              width: 60,
+              height: 60,
               child: Icon(
                 CupertinoIcons.add_circled,
-                size: 28,
+                size: 30,
                 color: Colors.white,
               ),
             ),
@@ -151,23 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-
-  Widget buildNavBarItem(IconData icon, int index) {
-    return InkWell(
-      onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: _selectedIndex == index
-                ? const Color.fromARGB(255, 90, 164, 165)
-                : const Color.fromARGB(255, 13, 17, 50),
-          ),
-        ],
-      ),
     );
   }
 }
