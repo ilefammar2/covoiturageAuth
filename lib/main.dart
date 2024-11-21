@@ -4,7 +4,8 @@ import 'package:projet_covoiturage/api/firebase_auth_config.dart';
 import 'package:projet_covoiturage/constants.dart';
 import 'package:projet_covoiturage/firebase_options.dart';
 import 'package:projet_covoiturage/screens/home.dart';
-import 'package:projet_covoiturage/utilities/auth_screens.dart';
+import 'package:projet_covoiturage/screens/auth_screens.dart';
+import 'package:projet_covoiturage/screens/homeP.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
       initialRoute: Constants.signInRoute,
       routes: {
         Constants.signInRoute: (context) => AuthScreens.buildSignInScreen(context),
+        Constants.homePRoute: (context) => const HomeScreen2(),
         Constants.homeRoute: (context) => const HomeScreen(),
-        
+
         Constants.verifyEmailRoute: (context) => AuthScreens.buildEmailVerificationScreen(context),
       },
     );

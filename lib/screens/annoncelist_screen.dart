@@ -7,7 +7,6 @@ class AnnonceListScreen extends StatefulWidget {
   const AnnonceListScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _AnnonceListScreenState createState() => _AnnonceListScreenState();
 }
 
@@ -43,8 +42,6 @@ class _AnnonceListScreenState extends State<AnnonceListScreen> {
       const SnackBar(content: Text("Annonce supprimée avec succès")),
     );
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +91,7 @@ class _AnnonceListScreenState extends State<AnnonceListScreen> {
               final arrivalCity = trajet['arrivalCity'] ?? 'Inconnu';
 
               String vehicleBrand = 'Inconnu';
-              if (vehiculeDetails != null) {
+              if (vehiculeDetails != null && vehiculeDetails is Map) {
                 vehicleBrand = vehiculeDetails['brand'] ?? 'Inconnu';
               }
 
@@ -157,7 +154,6 @@ class _AnnonceListScreenState extends State<AnnonceListScreen> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                    
                       IconButton(
                         icon: const Icon(Icons.delete, color: Color.fromARGB(255, 90, 164, 165)),
                         onPressed: () => _deleteAnnonce(annonceId),

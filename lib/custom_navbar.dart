@@ -4,7 +4,6 @@ class CustomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
-  // ignore: use_super_parameters
   const CustomNavBar({
     Key? key,
     required this.selectedIndex,

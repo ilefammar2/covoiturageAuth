@@ -7,30 +7,22 @@ import 'package:projet_covoiturage/screens/vehicule_screen.dart';
 
 class ChoixVehiculeScreen extends StatefulWidget {
   final String annonceId;
-
   const ChoixVehiculeScreen({super.key, required this.annonceId});
- 
   @override
-  // ignore: library_private_types_in_public_api
   _ChoixVehiculeScreenState createState() => _ChoixVehiculeScreenState();
 }
-
 class _ChoixVehiculeScreenState extends State<ChoixVehiculeScreen> {
   String? selectedVehicle;
-
   int _selectedIndex = -1;
   late Future<List<Map<String, dynamic>>> _vehicles;
   String? _selectedVehicleId;
-  // ignore: unused_field
   List<Map<String, dynamic>> _vehiclesList = [];
-    
   Future<void> _saveVehicleAndShowFinalAnnounce() async {
     if (_selectedVehicleId == null) {
       debugPrint('Veuillez choisir un véhicule.');
       return;
     }
     try {
-      // Récupérer les autres informations de l'annonce (trajet, date de départ, prix)
       final annonceSnapshot = await FirebaseFirestore.instance
           .collection('annonces')
           .doc(widget.annonceId)
@@ -62,12 +54,10 @@ class _ChoixVehiculeScreenState extends State<ChoixVehiculeScreen> {
         'date_depart': {
           'selectedDate': dateDepart,
         },
-        'trajet': trajet, // Garder le trajet inchangé
+        'trajet': trajet, 
       });
 
-      // Afficher l'annonce finale
       Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => FinalAnnounceScreen(annonceId: widget.annonceId),
@@ -228,7 +218,6 @@ class _ChoixVehiculeScreenState extends State<ChoixVehiculeScreen> {
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     }if (index == 1) {
-      // L'icône 1 affichera la liste des annonces
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AnnonceListScreen()),

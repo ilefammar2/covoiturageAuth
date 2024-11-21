@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:projet_covoiturage/screens/annoncelist_screen.dart';
-import 'package:projet_covoiturage/screens/home.dart';
-import 'package:projet_covoiturage/screens/vehicule_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'annoncelist_screen.dart';
+import 'home.dart';
+import 'vehicule_screen.dart';
 
 class FinalAnnounceScreen extends StatelessWidget {
   final String annonceId;
@@ -27,8 +28,26 @@ class FinalAnnounceScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _saveAnnonceWithUser(String annonceId) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection('annonces').doc(annonceId).update({
+          'userId': user.uid,
+        });
+      } catch (e) {
+        debugPrint("Erreur lors de l'enregistrement de l'ID utilisateur : $e");
+      }
+    } else {
+      debugPrint("Aucun utilisateur connecté.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _saveAnnonceWithUser(annonceId);
+
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance.collection('annonces').doc(annonceId).get(),
       builder: (context, snapshot) {
@@ -98,7 +117,7 @@ class FinalAnnounceScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color:Color.fromARGB(255, 90, 164, 165),
+                                color: Color.fromARGB(255, 90, 164, 165),
                               ),
                             ),
                           ),
@@ -130,7 +149,7 @@ class FinalAnnounceScreen extends StatelessWidget {
                           ),
                           _buildDetailRow(
                             icon: FontAwesomeIcons.car,
-                            color:const Color.fromARGB(255, 90, 164, 165),
+                            color: const Color.fromARGB(255, 90, 164, 165),
                             label: 'Véhicule:',
                             value: '$vehicleModel ($vehicleBrand)',
                           ),
@@ -141,19 +160,18 @@ class FinalAnnounceScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              bottomNavigationBar:BottomAppBar(
-  shape: const CircularNotchedRectangle(),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      buildNavBarItem(context, Icons.home, 0),
-      buildNavBarItem(context, Icons.assignment, 1),
-      buildNavBarItem(context, Icons.history, 2),
-      buildNavBarItem(context, Icons.directions_car, 3),
-    ],
-  ),
-)
-
+              bottomNavigationBar: BottomAppBar(
+                shape: const CircularNotchedRectangle(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    buildNavBarItem(context, Icons.home, 0),
+                    buildNavBarItem(context, Icons.assignment, 1),
+                    buildNavBarItem(context, Icons.history, 2),
+                    buildNavBarItem(context, Icons.directions_car, 3),
+                  ],
+                ),
+              ),
             );
           },
         );
@@ -189,38 +207,36 @@ class FinalAnnounceScreen extends StatelessWidget {
   }
 
   Widget buildNavBarItem(BuildContext context, IconData icon, int index) {
-  return InkWell(
-    onTap: () => _onItemTapped(context, index),  // Now context is passed correctly
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: Colors.black,
-        ),
-      ],
-    ),
-  );
-}
-
-
-
-  void _onItemTapped(BuildContext context, int index) {
-  if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
-  } else if (index == 1) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
-    );
-  } else if (index == 3) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const VehicleScreen()),
+    return InkWell(
+      onTap: () => _onItemTapped(context, index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: Colors.black,
+          ),
+        ],
+      ),
     );
   }
-}
+
+  void _onItemTapped(BuildContext context, int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const VehicleScreen()),
+      );
+    }
+  }
 }

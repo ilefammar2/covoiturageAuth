@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projet_covoiturage/screens/map_screen.dart';
 import 'package:projet_covoiturage/screens/annoncelist_screen.dart';
 import 'package:projet_covoiturage/screens/vehicule_screen.dart';
-import 'package:projet_covoiturage/custom_navbar.dart'; // Import du CustomNavBar
+import 'package:projet_covoiturage/custom_navbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  int notificationCount = 0; // Exemple: nombre de notifications non lues
+  int notificationCount = 0; 
 
   static final List<Widget> _screens = [
     Container(),

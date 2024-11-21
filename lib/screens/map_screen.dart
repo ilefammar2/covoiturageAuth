@@ -135,7 +135,6 @@ Future<void> _saveTripAndNavigate() async {
     });
 
     Navigator.push(
-      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(
         builder: (context) => DateDepartScreen(annonceId: annonceRef.id),
@@ -143,7 +142,6 @@ Future<void> _saveTripAndNavigate() async {
     );
   } catch (e) {
     debugPrint('Erreur lors de l\'enregistrement dans Firestore: $e');
-    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Erreur lors de l\'enregistrement du trajet.')),
     );
@@ -152,7 +150,6 @@ Future<void> _saveTripAndNavigate() async {
 
 
   int _selectedIndex = -1;
-  // ignore: unused_field
   static final List<Widget> _screens = [
     Container(),
     const Placeholder(),

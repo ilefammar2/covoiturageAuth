@@ -13,7 +13,6 @@ class DateDepartScreen extends StatefulWidget {
   const DateDepartScreen({super.key, required this.annonceId});
 
   @override
-  // ignore: library_private_types_in_public_api
   _DateDepartScreenState createState() => _DateDepartScreenState();
 }
 
@@ -23,7 +22,6 @@ class _DateDepartScreenState extends State<DateDepartScreen> {
   int _selectedIndex = -1;
 
   Future<void> _saveDateAndMoveToNextStep() async {
-    // ignore: unnecessary_null_comparison
     if (_selectedDate == null) {
       debugPrint('Veuillez sélectionner une date.');
       return;
@@ -39,7 +37,6 @@ class _DateDepartScreenState extends State<DateDepartScreen> {
         },
       });
       Navigator.push(
-        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => PrixScreen(annonceId: widget.annonceId),
@@ -47,7 +44,6 @@ class _DateDepartScreenState extends State<DateDepartScreen> {
       );
     } catch (e) {
       debugPrint('Erreur lors de l\'enregistrement dans Firestore: $e');
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erreur lors de l\'enregistrement du trajet.')),
       );
@@ -107,9 +103,9 @@ class _DateDepartScreenState extends State<DateDepartScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: const AssetImage('lib/assets/v2.jpg'), // Image de fond
+            image: const AssetImage('lib/assets/v2.jpg'), 
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken), // Assombrir l'image
+            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken), 
           ),
         ),
         child: Padding(
@@ -135,7 +131,7 @@ class _DateDepartScreenState extends State<DateDepartScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.0),
                     border: Border.all(width: 2, color: const Color.fromARGB(255, 12, 17, 51)),
-                    color: Colors.white.withOpacity(0.8), // Opacité pour rendre l'image visible derrière
+                    color: Colors.white.withOpacity(0.8),
                     boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,

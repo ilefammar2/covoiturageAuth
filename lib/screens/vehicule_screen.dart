@@ -8,7 +8,6 @@ class VehicleScreen extends StatefulWidget {
   const VehicleScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _VehicleScreenState createState() => _VehicleScreenState();
 }
 
@@ -18,13 +17,13 @@ class _VehicleScreenState extends State<VehicleScreen> {
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _colorController = TextEditingController();
   final TextEditingController _brandController = TextEditingController();
-  final TextEditingController _customModelController = TextEditingController(); // Controller for custom model
+  final TextEditingController _customModelController = TextEditingController(); 
   int _seats = 1;
   bool _isLoading = false;
-  bool _isCustomModel = false; // Flag to determine if the user selected "Other" for model
+  bool _isCustomModel = false; 
 
   List<String> vehicleModels = [
-    'Toyota Corolla', 'Honda Civic', 'Ford Focus', 'BMW X5', 'Audi A4', 'Autre' // Added "Autre" option
+    'Toyota Corolla', 'Honda Civic', 'Ford Focus', 'BMW X5', 'Audi A4', 'Autre' 
   ];
 
   List<String> vehicleBrands = [
@@ -65,7 +64,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
 
       try {
         await FirebaseFirestore.instance.collection('vehicles').add(vehiculeData);
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Véhicule ajouté avec succès!")),
         );
@@ -78,7 +76,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
           _seats = 1;
         });
       } catch (e) {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Erreur lors de l'ajout du véhicule: $e")),
         );
@@ -103,7 +100,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
       );
     }
  if (index == 1) {
-      // L'icône 1 affichera la liste des annonces
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
@@ -218,7 +214,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
               onChanged: (value) {
                 setState(() {
                   _modelController.text = value ?? '';
-                  _isCustomModel = value == 'Autre'; // If "Autre" is selected, show custom model input
+                  _isCustomModel = value == 'Autre'; 
                 });
               },
               items: vehicleModels
@@ -240,7 +236,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
                 return null;
               },
             ),
-            if (_isCustomModel) // Display text field for custom model
+            if (_isCustomModel) 
               TextFormField(
                 controller: _customModelController,
                 decoration: const InputDecoration(

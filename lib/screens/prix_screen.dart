@@ -12,7 +12,6 @@ class PrixScreen extends StatefulWidget {
 
   const PrixScreen({super.key, required this.annonceId});
   @override
-  // ignore: library_private_types_in_public_api
   _PrixScreenState createState() => _PrixScreenState();
 }
 
@@ -29,7 +28,6 @@ Future<void> _savePriceAndMoveToNextStep() async {
     }
 
  try {
-    // Récupérer les informations de l'annonce existantes
     DocumentSnapshot annonceSnapshot = await FirebaseFirestore.instance
         .collection('annonces')
         .doc(widget.annonceId)
@@ -40,28 +38,23 @@ Future<void> _savePriceAndMoveToNextStep() async {
       return;
     }
 
-    // Récupérer la date de départ existante depuis Firestore
     final dateDepart = annonceSnapshot['date_depart']['selectedDate'];
     final trajet = annonceSnapshot['trajet'];
-
-    // Mettre à jour Firestore avec le prix, la date de départ et les autres informations
  await FirebaseFirestore.instance
         .collection('annonces')
         .doc(widget.annonceId)
         .update({
       'prix': {
         'amount': price,
-        'currency': 'DNT',  // Optionnel, si tu veux inclure la monnaie
+        'currency': 'DNT',  
       },
       'date_depart': {
         'selectedDate': dateDepart,
       },
-      'trajet': trajet, // Garder le trajet inchangé
+      'trajet': trajet, 
     });
 
-    // Passer à l'étape suivante (ChoixVehiculeScreen)
     Navigator.push(
-      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(
         builder: (context) => ChoixVehiculeScreen(annonceId: widget.annonceId),
@@ -69,7 +62,6 @@ Future<void> _savePriceAndMoveToNextStep() async {
     );
   } catch (e) {
     debugPrint('Erreur lors de l\'enregistrement du prix: $e');
-    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Erreur lors de l\'enregistrement du prix.')),
     );
@@ -88,7 +80,6 @@ Future<void> _savePriceAndMoveToNextStep() async {
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } if (index == 1) {
-      // L'icône 1 affichera la liste des annonces
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AnnonceListScreen()),
@@ -159,7 +150,7 @@ Future<void> _savePriceAndMoveToNextStep() async {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _savePriceAndMoveToNextStep, // Appeler la méthode pour enregistrer l'annonce
+        onPressed: _savePriceAndMoveToNextStep, 
         backgroundColor: const Color.fromARGB(255, 143, 193, 194),
         child: const Icon(Icons.arrow_forward),
       ),
